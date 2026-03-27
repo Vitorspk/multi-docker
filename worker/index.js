@@ -18,6 +18,8 @@ function fib(index) {
 }
 
 sub.on('message', (channel, message) => {
-  redisClient.hset('values', message, fib(parseInt(message)));
+  const index = parseInt(message);
+  if (isNaN(index) || index < 0 || index > 10000) return;
+  redisClient.hset('values', message, fib(index));
 });
 sub.subscribe('insert');

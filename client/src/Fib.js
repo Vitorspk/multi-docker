@@ -9,11 +9,11 @@ class Fib extends Component {
   };
 
   componentDidMount() {
-    this.fetchValues();
-    this.fetchIndexes();
+    this.fetchValues().catch(console.error);
+    this.fetchIndexes().catch(console.error);
     this.interval = setInterval(() => {
-      this.fetchValues();
-      this.fetchIndexes();
+      this.fetchValues().catch(console.error);
+      this.fetchIndexes().catch(console.error);
     }, 3000);
   }
 
