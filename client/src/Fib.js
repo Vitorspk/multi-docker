@@ -11,6 +11,14 @@ class Fib extends Component {
   componentDidMount() {
     this.fetchValues();
     this.fetchIndexes();
+    this.interval = setInterval(() => {
+      this.fetchValues();
+      this.fetchIndexes();
+    }, 3000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   async fetchValues() {
