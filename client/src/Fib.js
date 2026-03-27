@@ -9,6 +9,7 @@ class Fib extends Component {
   };
 
   componentDidMount() {
+    this.mounted = true;
     this.fetchValues().catch(console.error);
     this.fetchIndexes().catch(console.error);
     this.interval = setInterval(() => {
@@ -18,19 +19,18 @@ class Fib extends Component {
   }
 
   componentWillUnmount() {
+    this.mounted = false;
     clearInterval(this.interval);
   }
 
   async fetchValues() {
     const values = await axios.get('/api/values/current');
-    this.setState({ values: values.data });
+    if (this.mounted) this.setState({ values: values.data });
   }
 
   async fetchIndexes() {
     const seenIndexes = await axios.get('/api/values/all');
-    this.setState({
-      seenIndexes: seenIndexes.data
-    });
+    if (this.mounted) this.setState({ seenIndexes: seenIndexes.data });
   }
 
   handleSubmit = async event => {
@@ -38,7 +38,7 @@ class Fib extends Component {
 
     await axios.post('/api/values', {
       index: this.state.index
-    });
+    }).catch(console.error);
     this.setState({ index: '' });
   };
 

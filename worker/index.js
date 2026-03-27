@@ -9,6 +9,7 @@ const redisClient = redis.createClient({
 const sub = redisClient.duplicate();
 
 function fib(index) {
+  if (index === 0) return 0;
   if (index < 2) return 1;
   let a = 1, b = 1;
   for (let i = 2; i <= index; i++) {
@@ -19,7 +20,10 @@ function fib(index) {
 
 sub.on('message', (channel, message) => {
   const index = parseInt(message);
-  if (isNaN(index) || index < 0 || index > 10000) return;
+  if (isNaN(index) || index < 0 || index > 10000) {
+    console.warn(`Worker: mensagem inválida descartada: "${message}"`);
+    return;
+  }
   redisClient.hset('values', message, fib(index));
 });
 sub.subscribe('insert');
